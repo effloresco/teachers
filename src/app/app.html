@@ -1,0 +1,145 @@
+<div class="panel">
+    <details>
+        <summary>Список користувачів</summary>
+        <pre>{{ users | json  }}</pre>
+    </details>
+</div>
+
+<div class="panel">
+    <h3>Валідація</h3>
+
+    <div class="buttons">
+        <button (click)="validateFirstUser()">
+            Перевірити першого користувача
+        </button>
+
+        <button (click)="validateUser()">
+            Перевірити п'ятого користувача
+        </button>
+    </div>
+
+    <div style="margin-top: 10px;">
+
+        @if (testedUser) {
+        <div class="result-container">
+            <p>Користувач: <strong>{{ testedUser.full_name }}</strong></p>
+            <p>
+                Статус валідації:
+                <strong [style.color]="validationResult ? 'green' : 'red'">
+                    {{ validationResult ? 'УСПІШНО' : 'ПОМИЛКА' }}
+                </strong>
+            </p>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="panel">
+    <h3>Фільтрація користувачів</h3>
+
+    <button (click)="filterUsers()">
+        Фільтрувати
+    </button>
+
+    <div style="margin-top: 15px;">
+        <p>Знайдено збігів: <strong>{{ filteredUsers.length }}</strong></p>
+
+        @if (filteredUsers.length > 0) {
+        <ul>
+            @for (user of filteredUsers; track user.id) {
+            <li>
+                <strong>{{ user.full_name }}</strong> —
+                Країна: {{ user.country }},
+                Вік: {{ user.age }},
+                Стать: {{ user.gender }},
+                Обраний: {{ user.favorite ? 'Так' : 'Ні' }}
+            </li>
+            }
+        </ul>
+        } @else {
+        <p style="color: #777;">Користувачів, які відповідають усім критеріям, не знайдено.</p>
+        }
+    </div>
+</div>
+
+<div class="panel">
+    <h3>Сортування користувачів</h3>
+
+    <div class="buttons">
+        <button (click)="sortByFullName()">За ім'ям (A-Z)</button>
+        <button (click)="sortByAge()">За віком (↓)</button>
+        <button (click)="sortByCountry()">За країною (A-Z)</button>
+        <button (click)="sortByBDay()">За датою народження (↑)</button>
+    </div>
+
+    @if (isSortTested) {
+    <p>Обране поле: <strong>{{ currentSortField }}</strong> ({{ currentSortOrder }})</p>
+
+    <ul>
+        @for (user of sortedUsers; track user.id) {
+        <li>
+            <strong>{{ user.full_name }}</strong> —
+            {{ user.age }} years,
+            {{ user.country }},
+            {{ user.b_date || user.b_day | date}}
+        </li>
+        }
+    </ul>
+    }
+</div>
+
+
+
+<div class="panel">
+    <h3>Пошук користувачів</h3>
+
+    <div class="buttons">
+        <button (click)="findDarren()">Ім'я "Darren"</button>
+        <button (click)="findByAge36()">Вік "36"</button>
+        <button (click)="findByNote()">Примітка "Good person"</button>
+    </div>
+
+    @if (isSearchTested) {
+    <p>
+        Запит: <strong>"{{ searchedQuery }}"</strong> (поле: {{ searchedField }}).
+        Знайдено: <strong>{{ foundUsers.length }}</strong>
+    </p>
+
+    @if (foundUsers.length > 0) {
+    <ul>
+        @for (user of foundUsers; track user.id) {
+        <li>
+            <strong>{{ user.full_name }}</strong> —
+            {{ user.age }} years,
+            {{ user.country }},
+            примітка: {{ user.note || 'відсутня' }}
+        </li>
+        }
+    </ul>
+    } @else {
+    <p style="color: #d9534f;">Жодного користувача не знайдено.</p>
+    }
+    }
+</div>
+
+
+<div class="panel">
+    <h3>Відсоток відповідності</h3>
+
+    <div class="buttons">
+        <button (click)="testAgeMoreThan30()">Вік > 30 років</button>
+        <button (click)="testGermany()">Країна "Germany"</button>
+        <button (click)="testFavorite()">В обраному (favorite)</button>
+    </div>
+
+    @if (isPercentageTested) {
+    <div style="padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 4px;">
+        <p style="margin: 0 0 5px 0;">Умова: <strong>{{ percentagePredicateDesc }}</strong></p>
+        <p style="margin: 0 0 5px 0;">Відповідають умові: <strong>{{ matchingUsersCount }}</strong> з {{ users.length }}
+            користувачів</p>
+        <p style="margin: 0; font-size: 1.1em;">
+            Відсоток: <strong style="color: #2e7d32;">{{ percentageResult }}%</strong>
+        </p>
+    </div>
+    }
+</div>
