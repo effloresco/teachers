@@ -1,0 +1,73 @@
+<div id="add-teacher" class="modal" popover>
+    <div class="popover-header">
+        <h2>Add Teacher</h2>
+        <button type="button" popovertarget="add-teacher" popovertargetaction="hide" class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+
+    <form class="popover-form" (submit)="onAddTeacher($event)">
+        <div class="form-group">
+            <label for="teacher-name">Name</label>
+            <input type="text" id="teacher-name" name="fullName" placeholder="Enter name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacher-speciality">Speciality</label>
+            <select id="teacher-speciality" name="course">
+                <option value="Mathematics">Mathematics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Physics">Physics</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="teacher-country">Country</label>
+                <select id="teacher-country" name="country">
+                    @for (country of countries; track country.value) {
+                    <option [value]="country.value">{{ country.label }}</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="teacher-city">City</label>
+                <input type="text" id="teacher-city" name="city">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="teacher-email">Email</label>
+                <input type="email" id="teacher-email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="teacher-phone">Phone</label>
+                <input type="tel" id="teacher-phone" name="phone">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="teacher-dob">Date of birth</label>
+            <input type="date" id="teacher-dob" name="dob">
+        </div>
+
+        <div class="form-group radio-group">
+            <label>Sex</label>
+            <div class="radio-options">
+                <label><input type="radio" name="gender" value="Male"> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+            </div>
+        </div>
+
+        <div class="form-group color-group">
+            <label for="teacher-color">Background color</label>
+            <input type="color" id="teacher-color" name="bgColor" value="#ffffff">
+        </div>
+
+        <div class="form-group">
+            <label for="teacher-notes">Notes (optional)</label>
+            <textarea id="teacher-notes" name="note" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Add</button>
+    </form>
+</div>
