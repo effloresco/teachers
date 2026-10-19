@@ -1,0 +1,55 @@
+<header>
+    <div class="header-top">
+        <h1>Teachinder</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Name, note or age to search" (input)="onSearchInput($event)"
+                (keyup)="onSearchKeyUp($event)">
+            <button type="button" class="btn-search" (click)="onSearchClick()">Search</button>
+
+            @if (isSearchActive && searchResults.length > 0) {
+            <div class="search-results">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Photo</th>
+                            <th>Full Name</th>
+                            <th>Age</th>
+                            <th>Speciality</th>
+                        </tr>
+                    </thead>
+                    <tbody (click) = "onNameClick($event)">
+                        @for (item of searchResults; track item.id) {
+                        <tr>
+                            <td>
+                                <img [src]="item.picture_thumbnail || item.picture_large " [alt]="item.alt">
+                            </td>
+                            <td>
+                                <a href="#" [attr.data-id]="item.id">
+                                    {{ item.full_name }}
+                                </a>
+                            </td>
+                            <td style=" text-align: center;">{{ item.age }}</td>
+                            <td>{{ item.course }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            } @else if (isSearchActive && searchResults.length === 0) {
+            <div class="search-results" style="width: 250px; padding: 15px; text-align: center;">
+                <p style="margin: 0; color: #666;">Нікого не знайдено</p>
+            </div>
+            }
+        </div>
+    </div>
+
+    <div class="header-nav">
+        <nav>
+            <a href="#teachers">Teachers</a>
+            <a href="#statistics">Statistics</a>
+            <a href="#favorites">Favorites</a>
+            <a href="#about">About</a>
+        </nav>
+        <button type="button" class="btn-add-teacher" (click)="onAddTeacherClick()">Add teacher</button>
+    </div>
+</header>

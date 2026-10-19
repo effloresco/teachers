@@ -1,0 +1,67 @@
+<section id="statistics">
+        <h2>Statistics</h2>
+        <table class="stats-table">
+            <thead (click)="onSortClick($event)">
+                <tr>
+                    <!-- (click)="onSort('full_name')" -->
+                    <th data-field="full_name">Name
+                        @if (currentSortField === 'full_name') {
+                        <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
+                        }
+                    </th>
+                    <!-- (click)="onSort('course')" -->
+                    <th data-field="course">Speciality
+                        @if (currentSortField === 'course') {
+                        <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
+                        }
+                    </th>
+                    <!-- (click)="onSort('age')" -->
+                    <th data-field="age">Age
+                        @if (currentSortField === 'age') {
+                        <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
+                        }
+                    </th>
+                    <!-- (click)="onSort('gender')" -->
+                    <th data-field="gender">Gender
+                        @if (currentSortField === 'gender') {
+                        <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
+                        }
+                    </th>
+                    <!-- (click)="onSort('country')" -->
+                    <th data-field="country">Nationality
+                        @if (currentSortField === 'country') {
+                        <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
+                        }
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody (click)="onSelectClick($event)">
+                @for (item of currentItems; track item.id) {
+                <tr>
+                    <td>
+                        <!-- (click)="onNameClick($event, item)" -->
+                        <a href="#" [attr.data-id]="item.id">
+                            {{ item.full_name }}
+                        </a>
+                    </td>
+                    <td>{{ item.course }}</td>
+                    <td>{{ item.age }}</td>
+                    <td>{{ item.gender }}</td>
+                    <td>{{ item.country }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <nav aria-label="pagination">
+            <ul class="pages">
+                @for (item of pages; track item) {
+                <li>
+                    <a href="#" [class.active]="item === currentStatsPage"
+                        (click)="onPageClick($event, item)">{{item}}</a>
+                </li>
+                }
+            </ul>
+        </nav>
+    </section>

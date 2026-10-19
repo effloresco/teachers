@@ -1,0 +1,43 @@
+<section id="teachers">
+    <h2>Top Teachers</h2>
+
+    <div class="filters">
+        <div class="group-filter">
+            <label>Age</label>
+            <select (change)="onAgeChange($event)">
+                <option value="">All</option>
+                <option value="21-30">21-30</option>
+                <option value="30-35">30-35</option>
+                <option value="35+">35+</option>
+            </select>
+        </div>
+        <div class="group-filter">
+            <label>Region</label>
+            <select (change)="onRegionChange($event)">
+                <option value="">All</option>
+                <option value="Europe">Europe</option>
+                <option value="Asia">Asia</option>
+                <option value="America">America</option>
+            </select>
+        </div>
+        <div class="group-filter">
+            <label>Sex</label>
+            <select (change)="onSexChange($event)">
+                <option value="">All</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+        <div class="group-filter checkboxes">
+            <label><input type="checkbox" (change)="onPhotoChange($event)"> Only with photo</label>
+            <label><input type="checkbox" (change)="onFavoritesChange($event)"> Only favorites</label>
+        </div>
+    </div>
+
+    <div class="teachers-grid" (click)="onOpenTeacherModal($event)">
+        @for (item of filteredTeachers; track item.id) {
+        <app-teacher-card [teacher]="item" [attr.data-id]="item.id">
+        </app-teacher-card>
+        }
+    </div>
+</section>

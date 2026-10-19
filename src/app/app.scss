@@ -1,0 +1,87 @@
+$main-color: #f05a5b;
+$text-dark: #333333;
+$text-light: #666666;
+$border-color: #e5e5e5;
+$font-main: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+$container-width: 960px;
+
+:host {
+    font-family: $font-main;
+    color: $text-dark;
+    background-color: #ffffff;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+app-teacher-section,
+app-statistics-section,
+app-favorites-section,
+app-header,
+app-about-section,
+app-footer {
+    display: block;
+    width: 100%;
+}
+
+header,
+main,
+footer {
+    width: 100%;
+    max-width: $container-width;
+}
+
+a {
+    text-decoration: none;
+    color: $main-color;
+}
+
+button {
+    font-family: $font-main;
+    cursor: pointer;
+}
+
+h2 {
+    text-align: center;
+    font-size: 28px;
+    margin: 30px 0 20px;
+    color: $text-dark;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #3d3636;
+    width: 50%;
+    margin: 40px auto;
+}
+
+[popover] {
+    border: none;
+    padding: 0;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    font-family: Arial, sans-serif;
+
+    &::backdrop {
+        background-color: rgba(0, 0, 0, 0.55);
+    }
+}
+
+@media (max-width: 768px) {
+    :host {
+        padding: 10px;
+    }
+
+    .divider {
+        width: 80%;
+    }
+    
+    footer {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
