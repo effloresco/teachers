@@ -2,6 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TeacherCard } from '../teacher-card/teacher-card';
 
+enum Direction {
+  Left = -1,
+  Right = 1
+}
+
 @Component({
   selector: 'app-favorites-section',
   standalone: true,
@@ -12,6 +17,8 @@ import { TeacherCard } from '../teacher-card/teacher-card';
 export class FavoritesSection {
   @Input() teacherData: any[] = [];
   @Output() selectTeacher = new EventEmitter<any>();
+
+  Direction = Direction;
 
   get favoriteTeachers() {
     const allTeachers = [...this.teacherData];
@@ -41,6 +48,9 @@ export class FavoritesSection {
     this.selectTeacher.emit(id);
   }
 
-  onSlideLeft(): void {}
-  onSlideRight(): void {}
+  onSlide(track: HTMLElement, direction: Direction): void {
+    const scrollAmount =  direction * (track.clientWidth || 300);    
+    track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+
 }

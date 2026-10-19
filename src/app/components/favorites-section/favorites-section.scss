@@ -16,7 +16,7 @@ $text-light: #666666;
     justify-content: center;
     gap: 1rem;
     position: relative;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
 
     .arrow-left,
@@ -37,7 +37,7 @@ $text-light: #666666;
 
     .favorites-grid {
       display: flex;
-      gap: 1.5rem;
+      gap: 3.1rem;
       overflow-x: auto;
       scroll-behavior: smooth;
       scroll-snap-type: x mandatory;
