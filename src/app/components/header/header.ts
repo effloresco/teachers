@@ -10,7 +10,7 @@ import { findUsers } from '../../utils';
 })
 export class Header {
   @Input() teacherData: any[] = [];
-  @Output() selectUser = new EventEmitter<any>();
+  @Output() selectTeacher = new EventEmitter<any>();
 
   searchQuery: string = '';
   searchResults: any[] = [];
@@ -44,10 +44,17 @@ onSearchClick(): void {
     this.searchResults = [];
   }
 
-  onNameClick(event: Event, user: any): void {
+  onNameClick(event: Event): void {
+
     event.preventDefault();
-    this.selectUser.emit(user);
-    this.onCloseSearch();
+    
+    const target = event.target as HTMLElement;
+    const idElement = target.closest('[data-id]') as HTMLElement;
+    if (!idElement) return
+
+    const id = idElement.dataset['id'];
+    this.selectTeacher.emit(id);
+
   }
 
   onAddTeacherClick(): void {

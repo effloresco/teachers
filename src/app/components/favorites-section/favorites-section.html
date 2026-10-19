@@ -1,27 +1,16 @@
 <section id="favorites">
-
     <h2>Favorites</h2>
 
     <div class="sliders">
-
         <button type="button" class="arrow-left" (click)="onSlideLeft()">&#11164;</button>
-
-
-        <div class="favorites-grid">
-
+       
+        <div class="favorites-grid" (click)="onOpenTeacherModal($event)">
             @for (teacher of favoriteTeachers; track teacher.id) {
-
-            <app-teacher-card [teacher]="teacher" [isCompact]="true" (cardClick)="onOpenTeacherModal($event)">
-
+            <app-teacher-card [teacher]="teacher" [isCompact]="true" [attr.data-id]="teacher.id">
             </app-teacher-card>
-
             }
-
         </div>
-
-
+        
         <button type="button" class="arrow-right" (click)="onSlideRight()">&#11166;</button>
-
     </div>
-
 </section>

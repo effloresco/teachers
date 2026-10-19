@@ -10,7 +10,7 @@ import { SortField, sortUsers } from '../../utils';
 })
 export class StatisticsSection implements OnChanges {
   @Input() teacherData: any[] = [];
-  @Output() selectUser = new EventEmitter<any>();
+  @Output() selectTeacher = new EventEmitter<any>();
   @Output() teacherDataChange = new EventEmitter<any[]>();
 
   ITEMS_PER_PAGE = 10;
@@ -61,8 +61,25 @@ export class StatisticsSection implements OnChanges {
     this.loadTable(this.currentStatsPage);
   }
 
-  onNameClick(e: Event, item: any): void {
+  onSortClick(event: Event) {
+    event.preventDefault();
+    const target = event.target as HTMLElement;
+    const columnElement = target.closest('[data-field]') as HTMLElement;
+    
+    if (!columnElement) return
+
+    const field = columnElement.dataset['field'];
+    this.onSort(field as SortField);
+  }
+
+  onSelectClick(e: Event) {
     e.preventDefault();
-    this.selectUser.emit(item);
+
+    const target = e.target as HTMLElement;
+    const idElement = target.closest('[data-id]') as HTMLElement;
+    if (!idElement) return
+
+    const id = idElement.dataset['id'];
+    this.selectTeacher.emit(id);
   }
 }

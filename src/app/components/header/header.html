@@ -17,19 +17,19 @@
                             <th>Speciality</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @for (user of searchResults; track user.id) {
+                    <tbody (click) = "onNameClick($event)">
+                        @for (item of searchResults; track item.id) {
                         <tr>
                             <td>
-                                <img [src]="user.picture_thumbnail || user.picture_large " [alt]="user.alt">
+                                <img [src]="item.picture_thumbnail || item.picture_large " [alt]="item.alt">
                             </td>
                             <td>
-                                <a href="#" (click)="onNameClick($event, user)">
-                                    {{ user.full_name }}
+                                <a href="#" [attr.data-id]="item.id">
+                                    {{ item.full_name }}
                                 </a>
                             </td>
-                            <td style=" text-align: center;">{{ user.age }}</td>
-                            <td>{{ user.course }}</td>
+                            <td style=" text-align: center;">{{ item.age }}</td>
+                            <td>{{ item.course }}</td>
                         </tr>
                         }
                     </tbody>

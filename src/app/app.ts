@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { randomUserMock, additionalUsers} from './teacherData';
 import { transformUsers, COUNTRIES } from './utils';
-
 import { Header } from './components/header/header';
 import { TeacherSection } from './components/teacher-section/teacher-section';
 import { StatisticsSection } from './components/statistics-section/statistics-section';
@@ -42,7 +41,8 @@ export class App implements OnInit {
   }
 
   openTeacherModal(teacher: any): void {
-    this.selectedTeacher = teacher;
+    const found = this.teacherData.find(item => item.id === teacher);
+    this.selectedTeacher = found;
     const modal = document.getElementById('teacher-modal');
     if (modal && typeof (modal as any).showPopover === 'function') {
       (modal as any).showPopover();

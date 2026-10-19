@@ -1,104 +1,58 @@
 $main-color: #f05a5b;
-$text-dark: #333333;
 $text-light: #666666;
-$border-color: #e5e5e5;
-$font-main: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-$container-width: 960px;
 
-.sliders {
+#favorites {
+  text-align: center;
+  padding: 2rem 0;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sliders {
     display: flex;
     align-items: center;
-    gap: 15px;
-}
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
 
-.arrow-left,
-.arrow-right {
-    background: transparent;
-    border: none;
-    font-size: 24px;
-    color: $text-light;
-    padding: 10px;
+    .arrow-left,
+    .arrow-right {
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: $text-light;
+      transition: color 0.2s, transform 0.2s;
+      padding: 0.5rem;
 
-    &:hover {
+      &:hover {
         color: $main-color;
+        transform: scale(1.15);
+      }
     }
-}
-
-.favorites-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
-    width: 100%;
-}
-
-.teacher-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-
-    .avatar-btn {
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        border-radius: 50%;
-        outline: none;
-        transition: transform 0.2s ease;
-
-        &:hover {
-            transform: scale(1.05);
-        }
-    }
-
-    .photo {
-        position: relative;
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        margin-bottom: 12px;
-        padding: 3px;
-        border: 2px solid $main-color;
-        box-sizing: border-box;
-
-        img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-
-            color: $main-color;
-            text-align: center;
-            line-height: 110px;
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-
-    }
-
-    h3 {
-        font-size: 16px;
-        margin-bottom: 4px;
-        color: $text-dark;
-    }
-
-    .speciality,
-    .country {
-        font-size: 13px;
-        color: $text-light;
-    }
-
-    .country {
-        font-size: 12px;
-    }
-}
-
-@media(max-width: 768px){
 
     .favorites-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding: 1rem 0.5rem;
+      width: 100%;
+    
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Edge */
+      }
+
+      app-teacher-card {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+      }
     }
+  }
 }

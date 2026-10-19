@@ -1,46 +1,47 @@
 <section id="statistics">
         <h2>Statistics</h2>
         <table class="stats-table">
-            <thead>
+            <thead (click)="onSortClick($event)">
                 <tr>
-                    <th (click)="onSort('full_name')">Name
+                    <!-- (click)="onSort('full_name')" -->
+                    <th data-field="full_name">Name
                         @if (currentSortField === 'full_name') {
                         <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
                         }
-
                     </th>
-                    <th (click)="onSort('course')">Speciality
+                    <!-- (click)="onSort('course')" -->
+                    <th data-field="course">Speciality
                         @if (currentSortField === 'course') {
                         <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
                         }
-
                     </th>
-                    <th (click)="onSort('age')">Age
+                    <!-- (click)="onSort('age')" -->
+                    <th data-field="age">Age
                         @if (currentSortField === 'age') {
                         <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
                         }
-
                     </th>
-                    <th (click)="onSort('gender')">Gender
+                    <!-- (click)="onSort('gender')" -->
+                    <th data-field="gender">Gender
                         @if (currentSortField === 'gender') {
                         <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
                         }
-
                     </th>
-                    <th (click)="onSort('country')">Nationality
+                    <!-- (click)="onSort('country')" -->
+                    <th data-field="country">Nationality
                         @if (currentSortField === 'country') {
                         <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
                         }
-
                     </th>
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody (click)="onSelectClick($event)">
                 @for (item of currentItems; track item.id) {
                 <tr>
                     <td>
-                        <a href="#" (click)="onNameClick($event, item)">
+                        <!-- (click)="onNameClick($event, item)" -->
+                        <a href="#" [attr.data-id]="item.id">
                             {{ item.full_name }}
                         </a>
                     </td>

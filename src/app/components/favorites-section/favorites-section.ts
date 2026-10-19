@@ -13,24 +13,32 @@ export class FavoritesSection {
   @Input() teacherData: any[] = [];
   @Output() selectTeacher = new EventEmitter<any>();
 
- get favoriteTeachers() {
+  get favoriteTeachers() {
     const allTeachers = [...this.teacherData];
     const favoritesMap = new Map();
-    
+
     allTeachers.forEach(t => {
       if (t && t.favorite) {
-        const key = t.id 
-        
+        const key = t.id
+
         if (key && !favoritesMap.has(key)) {
           favoritesMap.set(key, t);
         }
       }
     });
+
     return Array.from(favoritesMap.values());
   }
 
-  onOpenTeacherModal(teacher: any): void {
-    this.selectTeacher.emit(teacher);
+  onOpenTeacherModal(e: Event): void {
+    e.preventDefault();
+
+    const target = e.target as HTMLElement;
+    const idElement = target.closest('[data-id]') as HTMLElement;
+    if (!idElement) return
+
+    const id = idElement.dataset['id'];
+    this.selectTeacher.emit(id);
   }
 
   onSlideLeft(): void {}

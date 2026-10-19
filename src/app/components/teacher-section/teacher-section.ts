@@ -37,7 +37,14 @@ export class TeacherSection {
     });
   }
 
-  onOpenTeacherModal(teacher: any): void {
-    this.selectTeacher.emit(teacher);
+  onOpenTeacherModal(e: Event): void {
+    e.preventDefault();
+
+    const target = e.target as HTMLElement;
+    const idElement = target.closest('[data-id]') as HTMLElement;
+    if (!idElement) return
+
+    const id = idElement.dataset['id'];
+    this.selectTeacher.emit(id);
   }
 }

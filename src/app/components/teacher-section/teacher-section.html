@@ -34,12 +34,10 @@
         </div>
     </div>
 
-    <div class="teachers-grid">
-        @for (teacher of filteredTeachers; track teacher.id) {
-        <app-teacher-card 
-                [teacher]="teacher" 
-                (cardClick)="onOpenTeacherModal($event)">
-            </app-teacher-card>
+    <div class="teachers-grid" (click)="onOpenTeacherModal($event)">
+        @for (item of filteredTeachers; track item.id) {
+        <app-teacher-card [teacher]="item" [attr.data-id]="item.id">
+        </app-teacher-card>
         }
     </div>
 </section>
