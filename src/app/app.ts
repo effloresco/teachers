@@ -9,7 +9,7 @@ import { AboutSection } from './components/about-section/about-section';
 import { Footer } from './components/footer/footer';
 import { AddTeacherModal } from './components/add-teacher-modal/add-teacher-modal';
 import { TeacherModal } from './components/teacher-modal/teacher-modal';
-import {DataService} from  './services/dataService';
+import { DataService } from './services/dataService';
 
 @Component({
   selector: 'app-root',
@@ -35,15 +35,15 @@ export class App implements OnInit {
   countries = COUNTRIES;
   selectedTeacher: any = null;
 
-    private dataService = inject(DataService);
+  private dataService = inject(DataService);
 
   ngOnInit(): void {
-   this.dataService.getTeachers().subscribe({
+    this.dataService.getTeachers().subscribe({
       next: (data) => {
         this.receivedTeachers = data;
         console.log('Завантажено:', data);
-            this.teacherData.set(transformUsers(this.receivedTeachers));
-            console.log('Перетворено:', this.teacherData);
+        this.teacherData.set(transformUsers(this.receivedTeachers));
+        console.log('Перетворено:', this.teacherData);
       },
       error: (err) => {
         console.error('Помилка завантаження даних:', err);
@@ -71,18 +71,14 @@ export class App implements OnInit {
     const isSameTeacher = (a: any, b: any) => {
       if (a.email && b.email && a.email === b.email) return true;
       if (a.id && b.id && a.id === b.id) return true;
-      
+
       const nameA = (a.full_name || `${a.firstName || ''} ${a.lastName || ''}`).trim().toLowerCase();
       const nameB = (b.full_name || `${b.firstName || ''} ${b.lastName || ''}`).trim().toLowerCase();
       return nameA.length > 0 && nameA === nameB;
     };
 
-    this.teacherData.set(this.teacherData().map(t => 
+    this.teacherData.set(this.teacherData().map(t =>
       isSameTeacher(t, teacher) ? { ...t, favorite: newStatus } : t
-    ));
-
-    this.teacherData.set(this.teacherData().map(u => 
-      isSameTeacher(u, teacher) ? { ...u, favorite: newStatus } : u
     ));
 
     if (this.selectedTeacher && isSameTeacher(this.selectedTeacher, teacher)) {
@@ -90,4 +86,17 @@ export class App implements OnInit {
     }
   }
 
+
+
+  loadMoreTeachers(): void {
+    this.dataService.getTeachers(10).subscribe({
+      next: (newBatch) => {
+        const transformed = transformUsers(newBatch);
+        this.teacherData.update(current => [...current, ...transformed]);
+      },
+      error: (err) => console.error('Помилка довантаження:', err)
+    });
+  }
+
 }
+

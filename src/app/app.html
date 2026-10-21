@@ -5,7 +5,7 @@
     </app-teacher-section>
     <hr class="divider">
     <app-statistics-section [teacherData]="teacherData()"
-        (selectTeacher)="openTeacherModal($event)"></app-statistics-section>
+        (selectTeacher)="openTeacherModal($event)" (loadMoreTeachers)="loadMoreTeachers()"></app-statistics-section>
     <hr class="divider">
     <app-favorites-section [teacherData]="teacherData()"
         (selectTeacher)="openTeacherModal($event)"></app-favorites-section>

@@ -30,13 +30,24 @@
         </tbody>
     </table>
 
+    <div class="statistics-footer">
     <nav aria-label="pagination">
         <ul class="pages">
-            @for (item of pages; track item) {
+            @for (item of pages; track $index) {
             <li>
-                <a href="#" [class.active]="item === currentStatsPage" (click)="onPageClick($event, item)">{{item}}</a>
+                @if (item === '...') {
+                <span class="dots">...</span>
+                } @else {
+                <a href="#" [class.active]="item === currentStatsPage" (click)="onPageClick($event, item)">{{ item
+                    }}</a>
+                }
             </li>
             }
         </ul>
     </nav>
+
+    <button type="button" class="btn-load-more" (click)="onLoadMoreClick($event)">
+        Load more
+    </button>
+    </div>
 </section>

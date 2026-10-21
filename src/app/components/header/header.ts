@@ -23,7 +23,7 @@ export class Header {
       this.isSearchActive = false;
     }
   }
-onSearchClick(): void {
+  onSearchClick(): void {
     if (this.searchQuery && this.searchQuery.trim() !== '') {
       this.searchResults = findUsers(this.teacherData, this.searchQuery);
       this.isSearchActive = true;
@@ -47,7 +47,7 @@ onSearchClick(): void {
   onNameClick(event: Event): void {
 
     event.preventDefault();
-    
+
     const target = event.target as HTMLElement;
     const idElement = target.closest('[data-id]') as HTMLElement;
     if (!idElement) return
