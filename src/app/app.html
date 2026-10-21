@@ -1,13 +1,13 @@
-<app-header [teacherData]="teacherData" (selectTeacher)="openTeacherModal($event)"></app-header>
+<app-header [teacherData]="teacherData()" (selectTeacher)="openTeacherModal($event)"></app-header>
 <main>
     <hr class="divider">
-    <app-teacher-section [teacherData]="teacherData" (selectTeacher)="openTeacherModal($event)">
+    <app-teacher-section [teacherData]="teacherData()" (selectTeacher)="openTeacherModal($event)">
     </app-teacher-section>
     <hr class="divider">
-    <app-statistics-section [teacherData]="teacherData" (selectTeacher)="openTeacherModal($event)"
-        (teacherDataChange)="teacherData = $event"></app-statistics-section>
+    <app-statistics-section [teacherData]="teacherData()"
+        (selectTeacher)="openTeacherModal($event)"></app-statistics-section>
     <hr class="divider">
-    <app-favorites-section [teacherData]="teacherData"
+    <app-favorites-section [teacherData]="teacherData()"
         (selectTeacher)="openTeacherModal($event)"></app-favorites-section>
     <hr class="divider">
     <app-about-section></app-about-section>

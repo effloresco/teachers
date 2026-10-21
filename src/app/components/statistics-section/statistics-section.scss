@@ -5,10 +5,16 @@ $border-color: #e5e5e5;
 $font-main: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 $container-width: 960px;
 
+#statistics {
+  overflow-anchor: none;
+}
+
 .stats-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 25px;
+    overflow-anchor: none;
+    table-layout: fixed;
 
     th,
     td {

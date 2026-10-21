@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { randomUserMock, additionalUsers} from './teacherData';
 import { transformUsers, COUNTRIES } from './utils';
 import { Header } from './components/header/header';
 import { TeacherSection } from './components/teacher-section/teacher-section';
@@ -10,6 +9,7 @@ import { AboutSection } from './components/about-section/about-section';
 import { Footer } from './components/footer/footer';
 import { AddTeacherModal } from './components/add-teacher-modal/add-teacher-modal';
 import { TeacherModal } from './components/teacher-modal/teacher-modal';
+import {DataService} from  './services/dataService';
 
 @Component({
   selector: 'app-root',
@@ -29,19 +29,31 @@ import { TeacherModal } from './components/teacher-modal/teacher-modal';
   templateUrl: './app.html'
 })
 export class App implements OnInit {
-  teacherData = transformUsers(randomUserMock, additionalUsers);
+
+  teacherData = signal([] as any[]);
+  receivedTeachers: any[] = [];
   countries = COUNTRIES;
   selectedTeacher: any = null;
 
-  ngOnInit(): void {
-    this.teacherData.forEach(t => { if (t.favorite === undefined) t.favorite = false; });
-    this.teacherData.forEach(u => { if (u.favorite === undefined) u.favorite = false; });
+    private dataService = inject(DataService);
 
-    
+  ngOnInit(): void {
+   this.dataService.getTeachers().subscribe({
+      next: (data) => {
+        this.receivedTeachers = data;
+        console.log('Завантажено:', data);
+            this.teacherData.set(transformUsers(this.receivedTeachers));
+            console.log('Перетворено:', this.teacherData);
+      },
+      error: (err) => {
+        console.error('Помилка завантаження даних:', err);
+      }
+    });
+
   }
 
   openTeacherModal(teacher: any): void {
-    const found = this.teacherData.find(item => item.id === teacher);
+    const found = this.teacherData().find(item => item.id === teacher);
     this.selectedTeacher = found;
     const modal = document.getElementById('teacher-modal');
     if (modal && typeof (modal as any).showPopover === 'function') {
@@ -50,8 +62,7 @@ export class App implements OnInit {
   }
 
   addTeacher(newTeacher: any): void {
-    this.teacherData.unshift(newTeacher);
-    this.teacherData = [...this.teacherData];
+    this.teacherData.update(teachers => [newTeacher, ...teachers]);
   }
 
   toggleFavorite(teacher: any): void {
@@ -66,13 +77,13 @@ export class App implements OnInit {
       return nameA.length > 0 && nameA === nameB;
     };
 
-    this.teacherData = this.teacherData.map(t => 
+    this.teacherData.set(this.teacherData().map(t => 
       isSameTeacher(t, teacher) ? { ...t, favorite: newStatus } : t
-    );
+    ));
 
-    this.teacherData = this.teacherData.map(u => 
+    this.teacherData.set(this.teacherData().map(u => 
       isSameTeacher(u, teacher) ? { ...u, favorite: newStatus } : u
-    );
+    ));
 
     if (this.selectedTeacher && isSameTeacher(this.selectedTeacher, teacher)) {
       this.selectedTeacher = { ...this.selectedTeacher, favorite: newStatus };

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { createNewTeacher } from '../../utils';
+import { createNewTeacher, validateUser } from '../../utils';
 
 @Component({
   selector: 'app-add-teacher-modal',
@@ -12,6 +12,9 @@ import { createNewTeacher } from '../../utils';
 export class AddTeacherModal {
   @Input() countries: any[] = [];
   @Output() teacherAdded = new EventEmitter<any>();
+
+  isValid: boolean = true;
+  messages: string[] = [];
 
   onAddTeacher(event: Event): void {
     event.preventDefault();
@@ -32,13 +35,18 @@ export class AddTeacherModal {
     };
 
     const newTeacher = createNewTeacher(teacherData);
-    this.teacherAdded.emit(newTeacher);
+    let validationResult = validateUser(newTeacher);
 
-    form.reset();
+    this.isValid = validationResult.isValid;
 
-    const modal = document.getElementById('add-teacher');
-    if (modal && typeof (modal as any).hidePopover === 'function') {
-      (modal as any).hidePopover();
+    if (this.isValid) {
+      this.teacherAdded.emit(newTeacher);
+
+      form.reset();
+      this.onClose();
+    }
+    else{
+      this.messages = validationResult.messages;
     }
   }
 

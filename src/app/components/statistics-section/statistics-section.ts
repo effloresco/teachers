@@ -11,7 +11,6 @@ import { SortField, sortUsers } from '../../utils';
 export class StatisticsSection implements OnChanges {
   @Input() teacherData: any[] = [];
   @Output() selectTeacher = new EventEmitter<any>();
-  @Output() teacherDataChange = new EventEmitter<any[]>();
 
   ITEMS_PER_PAGE = 10;
   currentStatsPage = 1;
@@ -20,15 +19,28 @@ export class StatisticsSection implements OnChanges {
 
   currentSortField: string = '';
   currentSortDirection: 'asc' | 'desc' = 'asc';
+  columns = [
+  { field: 'full_name', label: 'Name' },
+  { field: 'course', label: 'Speciality' },
+  { field: 'age', label: 'Age' },
+  { field: 'gender', label: 'Gender' },
+  { field: 'country', label: 'Nationality' }
+];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['teacherData']) {
-      this.initPagination();
-      this.loadTable(this.currentStatsPage);
+      const currentValue = changes['teacherData'].currentValue;
+      if (Array.isArray(currentValue)) {
+        this.initPagination();
+        this.loadTable(this.currentStatsPage);
+      }
     }
   }
 
   initPagination(): void {
+
+    if (!Array.isArray(this.teacherData)) return;
+
     const totalPages = Math.ceil(this.teacherData.length / this.ITEMS_PER_PAGE);
     this.pages = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -38,9 +50,16 @@ export class StatisticsSection implements OnChanges {
 
   loadTable(page: number): void {
     this.currentStatsPage = page;
+
+    if (!Array.isArray(this.teacherData)) {
+      this.currentItems = [];
+      return;
+    }
+
     const startIndex = (page - 1) * this.ITEMS_PER_PAGE;
     const endIndex = startIndex + this.ITEMS_PER_PAGE;
     this.currentItems = this.teacherData.slice(startIndex, endIndex);
+    console.log('Поточні елементи для таблиці:', this.currentItems);
   }
 
   onPageClick(e: Event, page: number): void {
@@ -56,17 +75,19 @@ export class StatisticsSection implements OnChanges {
       this.currentSortDirection = 'asc';
     }
 
-    const sorted = sortUsers(this.teacherData, field, this.currentSortDirection);
-    this.teacherDataChange.emit(sorted);
-    this.loadTable(this.currentStatsPage);
+    const sorted = sortUsers([...this.teacherData], field, this.currentSortDirection);
+    this.currentItems = sorted.slice((this.currentStatsPage - 1) * this.ITEMS_PER_PAGE, this.currentStatsPage * this.ITEMS_PER_PAGE);
+
   }
 
   onSortClick(event: Event) {
     event.preventDefault();
+    event.stopPropagation();
+
     const target = event.target as HTMLElement;
     const columnElement = target.closest('[data-field]') as HTMLElement;
-    
-    if (!columnElement) return
+
+    if (!columnElement) return;
 
     const field = columnElement.dataset['field'];
     this.onSort(field as SortField);
