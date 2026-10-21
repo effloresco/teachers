@@ -23,38 +23,34 @@ export const COUNTRIES = [
   { value: 'Vietnam', label: 'Vietnam' }
 ];
 
-function getAlt(teacher: any): string {
-  if (teacher.alt) {
-    return teacher.alt;
-  }
+export const PHONE_PATTERNS: Record<string, RegExp> = {
+  'Iran': /^\d{3}-\d{8}$/,
+  'France': /^\d{2}(-\d{2}){4}$/,
+  'Switzerland': /^\d{3}\s\d{3}\s\d{2}\s\d{2}$/,
+  'Netherlands': /^\(\d{3}\)-\d{3}-\d{4}$/,
+  'Canada': /^\d{3}-\d{3}-\d{4}$/,
+  'Denmark': /^\d{8}$/,
+  'United States': /^\(\d{3}\)-\d{3}-\d{4}$/,
+  'Germany': /^\d{4}-\d{7}$/,
+  'Finland': /^\d{2}-\d{3}-\d{3}$/,
+  'Ireland': /^\d{8}$/,
+  'England': /^\d{3}-\d{3}-\d{4}$/,
+  'Scotland': /^\d{3}\s\d{3}\s\d{2}\s\d{2}$/,
+  'Italy': /^\d{2}(-\d{2}){4}$/,
+  'Austria': /^\d{4}-\d{7}$/,
+  'Vietnam': /^\d{3}-\d{3}-\d{4}$/
+};
 
-  const firstLetter = teacher.name?.first?.[0];
-  const lastLetter = teacher.name?.last?.[0];
-  
-  if (firstLetter && lastLetter) {
-    return `${firstLetter.toUpperCase()}. ${lastLetter.toUpperCase()}`;
-  }
-
-  if (teacher.full_name) {
-    const names = teacher.full_name.trim().split(" ");
-    
-    if (names.length >= 2 && names[0]?.[0] && names[1]?.[0]) {
-      return `${names[0][0].toUpperCase()}. ${names[1][0].toUpperCase()}`;
-    }
-    
-    if (names.length === 1 && names[0]?.[0]) {
-      return `${names[0][0].toUpperCase()}.`;
-    }
-  }
-
-  return '';
+export interface ValidationResult {
+  isValid: boolean;
+  errorMessage: string;
 }
 
-export function transformUsers(randomUsers: any[], additionalUsers: any[]): any[] {
-  const combined = [...randomUsers, ...additionalUsers];
+
+export function transformUsers(randomUsers: any[]): any[] {
   const uniqueMap = new Map();
 
-  for (const item of combined) {
+  for (const item of randomUsers) {
     const formattedUser = {
       gender: item.gender?.toLowerCase() || '',
       title: item.title || item.name?.title || '',
@@ -71,7 +67,7 @@ export function transformUsers(randomUsers: any[], additionalUsers: any[]): any[
       phone: item.phone || '',
       picture_large: item.picture_large || item.picture?.large || '',
       picture_thumbnail: item.picture_thumbnail || item.picture?.thumbnail || '',
-      id: typeof(item.id) === 'string' && item.id || item.login?.uuid || crypto.randomUUID(),
+      id: typeof (item.id) === 'string' && item.id || item.login?.uuid || crypto.randomUUID(),
       favorite: item.favorite,
       course: item.course || getRandomCourse(),
       bg_color: item.bg_color || '#ffffff',
@@ -94,23 +90,32 @@ export function getRandomCourse(): string {
   return COURSES[index];
 }
 
-export const PHONE_PATTERNS: Record<string, RegExp> = {
-  'Iran': /^\d{3}-\d{8}$/,
-  'France': /^\d{2}(-\d{2}){4}$/,
-  'Switzerland': /^\d{3}\s\d{3}\s\d{2}\s\d{2}$/,
-  'Netherlands': /^\(\d{3}\)-\d{3}-\d{4}$/,
-  'Canada': /^\d{3}-\d{3}-\d{4}$/,
-  'Denmark': /^\d{8}$/,
-  'United States': /^\(\d{3}\)-\d{3}-\d{4}$/,
-  'Germany': /^\d{4}-\d{7}$/,
-  'Finland': /^\d{2}-\d{3}-\d{3}$/,
-  'Ireland': /^\d{8}$/,
-  'England': /^\d{3}-\d{3}-\d{4}$/,
-  'Scotland': /^\d{3}\s\d{3}\s\d{2}\s\d{2}$/,
-  'Italy': /^\d{2}(-\d{2}){4}$/,
-  'Austria': /^\d{4}-\d{7}$/,
-  'Vietnam': /^\d{3}-\d{3}-\d{4}$/
-};
+function getAlt(teacher: any): string {
+  if (teacher.alt) {
+    return teacher.alt;
+  }
+
+  const firstLetter = teacher.name?.first?.[0];
+  const lastLetter = teacher.name?.last?.[0];
+
+  if (firstLetter && lastLetter) {
+    return `${firstLetter.toUpperCase()}. ${lastLetter.toUpperCase()}`;
+  }
+
+  if (teacher.full_name) {
+    const names = teacher.full_name.trim().split(" ");
+
+    if (names.length >= 2 && names[0]?.[0] && names[1]?.[0]) {
+      return `${names[0][0].toUpperCase()}. ${names[1][0].toUpperCase()}`;
+    }
+
+    if (names.length === 1 && names[0]?.[0]) {
+      return `${names[0][0].toUpperCase()}.`;
+    }
+  }
+
+  return '';
+}
 
 export function isCapitalizedString(val: any): boolean {
   if (typeof val !== 'string' || val.trim().length === 0) {
@@ -123,25 +128,120 @@ export function isCapitalizedString(val: any): boolean {
 export function isValidPhone(phone: any, country: string): boolean {
   if (typeof phone !== 'string') return false;
   const pattern = PHONE_PATTERNS[country];
-  return pattern?.test(phone);
+
+  if (pattern) {
+    return pattern.test(phone);
+  } else {
+    const generalPattern = /^[+]?[\d\s\-\(\)]{7,20}$/;
+
+    const digitsCount = (phone.match(/\d/g) || []).length;
+
+    return generalPattern.test(phone) && digitsCount >= 7;
+  }
 }
 
-export function validateUser(user: any): boolean {
-  if (!user || typeof user !== 'object') return false;
+export function validateFullName(name: string) {
+  const result: ValidationResult = { isValid: true, errorMessage: '' };
+  if (!name) {
+    result.errorMessage = "Field 'Full name' is required.";
+    result.isValid = false;
+  } else if (!isCapitalizedString(name)) {
+    result.errorMessage = "Field name must begin with a capital letter.";
+    result.isValid = false;
+  }
+  return result;
+}
 
-  const stringFields = ['full_name'/*, 'state', 'city', 'country'*/];
+const optionalStringFields = ['state', 'city'];
+export function validateOptionalStrings(user: any) {
+  const result: ValidationResult = { isValid: true, errorMessage: '' };
+  for (const field of optionalStringFields) {
+    if (user[field] && !isCapitalizedString(user[field])) {
+      result.errorMessage = `Field ${field} must begin with a capital letter.`;
+      result.isValid = false;
+      break;
+    }
+  }
+  return result;
+}
 
-  const isStringsValid = stringFields.every(field => isCapitalizedString(field));
+export function validateAge(age: number) {
+  const result: ValidationResult = { isValid: true, errorMessage: '' };
+  if (age === undefined || age === null) {
+    result.errorMessage = "Field age is required.";
+    result.isValid = false;
+  } else if (age <= 16 || age > 120) {
+    result.errorMessage = "Incorrect age.";
+    result.isValid = false;
+  }
 
-  const isNoteValid = !user.note || isCapitalizedString(user.note);
+  return result;
+}
 
-  const isAgeValid = typeof user.age === 'number' && !isNaN(user.age);
+export function validatePhoneNumber(phone: string, country: string) {
+  const result: ValidationResult = { isValid: true, errorMessage: '' };
+  if (!phone) {
+    result.errorMessage = "Phone number is required.";
+    result.isValid = false;
+  } else if (country && !isValidPhone(phone, country)) {
+    result.errorMessage = `Incorrect phone number format for ${country}.`;
+    result.isValid = false;
+  }
+  return result;
+}
 
-  const isPhoneValid = isValidPhone(user.phone, user.country);
+export function validateEmail(email: string) {
+  const result: ValidationResult = { isValid: true, errorMessage: '' };
+  if (!email) {
+    result.errorMessage = "Email is required.";
+    result.isValid = false;
+  } else if (!email.includes('@') || !email.includes('.')) {
+    result.errorMessage = "Incorrect email address.";
+    result.isValid = false;
+  }
 
-  const isEmailValid = typeof user.email === 'string' && user.email.includes('@');
+  return result;
+}
+export function validateNote(note: string) {
+  const result: ValidationResult = { isValid: true, errorMessage: '' };
+  if (note && !isCapitalizedString(note)) {
+    result.errorMessage = "Field note must begin with a capital letter.";
+    result.isValid = false;
+  }
+  return result
+}
 
-  return isStringsValid /* && isAgeValid && isPhoneValid &&isEmailValid && isNoteValid*/;
+export function validateUser(user: any) {
+let messages: string[] = [];
+let currentValidation;
+
+currentValidation = validateFullName(user.full_name);
+if (!currentValidation.isValid)
+messages.push(currentValidation.errorMessage);
+
+currentValidation = validateOptionalStrings(user);
+if (!currentValidation.isValid)
+messages.push(currentValidation.errorMessage);
+
+currentValidation = validateAge(user.age);
+if (!currentValidation.isValid)
+messages.push(currentValidation.errorMessage);
+
+currentValidation = validatePhoneNumber(user.phone, user.country);
+if (!currentValidation.isValid)
+messages.push(currentValidation.errorMessage);
+
+currentValidation = validateEmail(user.email);
+if (!currentValidation.isValid)
+messages.push(currentValidation.errorMessage);
+
+currentValidation = validateNote(user.note);
+if (!currentValidation.isValid)
+messages.push(currentValidation.errorMessage);
+
+const isValid: boolean = messages.length == 0 ? true : false;
+
+return { isValid, messages };
 }
 
 export function getRegion(country: string): string {

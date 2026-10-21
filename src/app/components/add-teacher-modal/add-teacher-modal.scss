@@ -83,34 +83,50 @@ $container-width: 960px;
         }
     }
 
-       .popover-header {
-    background-color: #434346;
-    color: #ffffff;
-    padding: 10px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    h2 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: normal;
+    .popover-header {
+        background-color: #434346;
         color: #ffffff;
-    }
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-    .close-btn {
-        background: transparent;
-        border: none;
-        color: #ffffff;
-        font-size: 20px;
-        cursor: pointer;
-        line-height: 1;
+        h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: normal;
+            color: #ffffff;
+        }
 
-        &:hover {
-            color: $main-color;
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+
+            &:hover {
+                color: $main-color;
+            }
         }
     }
-}
+
+    .input-errors {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+
+        p {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 13px;
+        }
+
+    }
 
     .btn-submit {
         margin-top: 8px;
@@ -129,8 +145,8 @@ $container-width: 960px;
     }
 }
 
-@media(max-width: 768px){
-.popover-form .form-row {
+@media(max-width: 768px) {
+    .popover-form .form-row {
         flex-direction: column;
         gap: 0;
     }
