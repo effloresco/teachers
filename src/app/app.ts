@@ -69,12 +69,8 @@ export class App implements OnInit {
     const newStatus = !teacher.favorite;
 
     const isSameTeacher = (a: any, b: any) => {
-      if (a.email && b.email && a.email === b.email) return true;
-      if (a.id && b.id && a.id === b.id) return true;
-
-      const nameA = (a.full_name || `${a.firstName || ''} ${a.lastName || ''}`).trim().toLowerCase();
-      const nameB = (b.full_name || `${b.firstName || ''} ${b.lastName || ''}`).trim().toLowerCase();
-      return nameA.length > 0 && nameA === nameB;
+      if (a.id === b.id) return true;
+      return false;
     };
 
     this.teacherData.set(this.teacherData().map(t =>

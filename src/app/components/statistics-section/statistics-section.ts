@@ -77,17 +77,23 @@ export class StatisticsSection implements OnChanges {
     this.pages = pagination;
   }
 
-  loadTable(page: number): void {
-   this.currentStatsPage = page;
+loadTable(page: number): void {
+    this.currentStatsPage = page;
 
     if (!Array.isArray(this.teacherData)) {
       this.currentItems = [];
       return;
     }
 
+    let dataToDisplay = [...this.teacherData];
+
+    if (this.currentSortField) {
+      dataToDisplay = sortUsers(dataToDisplay, this.currentSortField as SortField, this.currentSortDirection);
+    }
+
     const startIndex = (page - 1) * this.ITEMS_PER_PAGE;
     const endIndex = startIndex + this.ITEMS_PER_PAGE;
-    this.currentItems = this.teacherData.slice(startIndex, endIndex);
+    this.currentItems = dataToDisplay.slice(startIndex, endIndex);
     
     this.initPagination();
   }
