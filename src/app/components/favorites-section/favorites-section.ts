@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TeacherCard } from '../teacher-card/teacher-card';
+import { DataService } from '../../services/dataService';
 
 enum Direction {
   Left = -1,
@@ -9,24 +10,25 @@ enum Direction {
 
 @Component({
   selector: 'app-favorites-section',
-  standalone: true,
   imports: [CommonModule, TeacherCard],
   templateUrl: './favorites-section.html',
   styleUrl: './favorites-section.scss'
 })
 export class FavoritesSection {
-  @Input() teacherData: any[] = [];
   @Output() selectTeacher = new EventEmitter<any>();
-
+  
+  dataService = inject(DataService);
   Direction = Direction;
 
   get favoriteTeachers() {
-    const allTeachers = [...this.teacherData];
+    let teacherData = this.dataService.filteredTeachers();
+    if (!Array.isArray(teacherData)) return [];
+
     const favoritesMap = new Map();
 
-    allTeachers.forEach(t => {
+    teacherData.forEach(t => {
       if (t && t.favorite) {
-        const key = t.id
+        const key = t.id || t.uuid;
 
         if (key && !favoritesMap.has(key)) {
           favoritesMap.set(key, t);
@@ -49,7 +51,7 @@ export class FavoritesSection {
   }
 
   onSlide(track: HTMLElement, direction: Direction): void {
-    const scrollAmount =  direction * (track.clientWidth || 300);    
+    const scrollAmount = direction * (track.clientWidth || 300);
     track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 

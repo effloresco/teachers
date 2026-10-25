@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SortField, sortUsers } from '../../utils';
+import { DataService } from '../../services/dataService';
+import { SortField } from '../../utils/types';
+import { sort } from '../../utils/processing';
 
 @Component({
   selector: 'app-statistics-section',
@@ -8,41 +10,48 @@ import { SortField, sortUsers } from '../../utils';
   templateUrl: './statistics-section.html',
   styleUrl: './statistics-section.scss'
 })
-export class StatisticsSection implements OnChanges {
-  @Input() teacherData: any[] = [];
+export class StatisticsSection {
   @Output() selectTeacher = new EventEmitter<any>();
-  @Output() loadMoreTeachers = new EventEmitter<void>();
-
+  
+  dataService = inject(DataService);
   ITEMS_PER_PAGE = 10;
-  currentStatsPage = 1;
-  currentItems: any[] = [];
-  pages: (number | string)[] = [];
-
+  currentPage = this.dataService.currentPage();
   currentSortField: string = '';
   currentSortDirection: 'asc' | 'desc' = 'asc';
   columns = [
-  { field: 'full_name', label: 'Name' },
-  { field: 'course', label: 'Speciality' },
-  { field: 'age', label: 'Age' },
-  { field: 'gender', label: 'Gender' },
-  { field: 'country', label: 'Nationality' }
-];
+    { field: 'full_name', label: 'Name' },
+    { field: 'course', label: 'Speciality' },
+    { field: 'age', label: 'Age' },
+    { field: 'gender', label: 'Gender' },
+    { field: 'country', label: 'Nationality' }
+  ];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['teacherData']) {
-      const currentValue = changes['teacherData'].currentValue;
-      if (Array.isArray(currentValue)) {
-        this.initPagination();
-        this.loadTable(this.currentStatsPage);
-      }
-    }
+  onPageClick(e: Event, page: number | string): void {
+    e.preventDefault();
+    if (typeof page === 'string') return;
+
+    this.dataService.currentPage.set(page);
   }
 
-  initPagination(): void {
-    if (!Array.isArray(this.teacherData)) return;
+  get currentItems(): any[] {
+    const teachers = this.dataService.filteredTeachers();
+    const page = this.dataService.currentPage();
+    const limit = this.dataService.itemsPerPage;
 
-    const totalPages = Math.ceil(this.teacherData.length / this.ITEMS_PER_PAGE);
-    const current = this.currentStatsPage;
+    let dataToDisplay = [...teachers];
+
+    if (this.currentSortField) {
+      dataToDisplay = sort(dataToDisplay, this.currentSortField as SortField, this.currentSortDirection);
+    }
+
+    const startIndex = (page - 1) * limit;
+    return dataToDisplay.slice(startIndex, startIndex + limit);
+  }
+
+  get pages(): (number | string)[] {
+    const totalTeachers = this.dataService.filteredTeachers().length;
+    const totalPages = Math.ceil(totalTeachers / this.dataService.itemsPerPage);
+    const current = this.dataService.currentPage();
     const pagination: (number | string)[] = [];
 
     if (totalPages <= 4) {
@@ -74,40 +83,12 @@ export class StatisticsSection implements OnChanges {
       }
     }
 
-    this.pages = pagination;
-  }
-
-loadTable(page: number): void {
-    this.currentStatsPage = page;
-
-    if (!Array.isArray(this.teacherData)) {
-      this.currentItems = [];
-      return;
-    }
-
-    let dataToDisplay = [...this.teacherData];
-
-    if (this.currentSortField) {
-      dataToDisplay = sortUsers(dataToDisplay, this.currentSortField as SortField, this.currentSortDirection);
-    }
-
-    const startIndex = (page - 1) * this.ITEMS_PER_PAGE;
-    const endIndex = startIndex + this.ITEMS_PER_PAGE;
-    this.currentItems = dataToDisplay.slice(startIndex, endIndex);
-    
-    this.initPagination();
-  }
-
-  onPageClick(e: Event, page: number | string): void {
-    e.preventDefault();
-    if (typeof page === 'string') return;
-
-    this.loadTable(page);
+    return pagination;
   }
 
   onLoadMoreClick(e: Event): void {
     e.preventDefault();
-    this.loadMoreTeachers.emit();
+    this.dataService.loadTeachers(10);
   }
 
   onSort(field: SortField): void {
@@ -118,9 +99,7 @@ loadTable(page: number): void {
       this.currentSortDirection = 'asc';
     }
 
-    const sorted = sortUsers([...this.teacherData], field, this.currentSortDirection);
-    this.currentItems = sorted.slice((this.currentStatsPage - 1) * this.ITEMS_PER_PAGE, this.currentStatsPage * this.ITEMS_PER_PAGE);
-
+    const sorted = sort([...this.currentItems], field, this.currentSortDirection);
   }
 
   onSortClick(event: Event) {

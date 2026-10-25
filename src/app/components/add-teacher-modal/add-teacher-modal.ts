@@ -1,18 +1,21 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { createNewTeacher, validateUser } from '../../utils';
+import { COUNTRIES, COURSES} from '../../utils/constants';
+import { createNewTeacher} from '../../utils/normalization';
+import { validateUser} from '../../utils/validation';
+import { DataService } from '../../services/dataService';
 
 @Component({
   selector: 'app-add-teacher-modal',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './add-teacher-modal.html',
   styleUrl: './add-teacher-modal.scss'
 })
 export class AddTeacherModal {
-  @Input() countries: any[] = [];
+  //private dataService = inject(DataService);
   @Output() teacherAdded = new EventEmitter<any>();
-
+  countries = COUNTRIES;
+  courses = COURSES;
   isValid: boolean = true;
   messages: string[] = [];
 
@@ -41,11 +44,9 @@ export class AddTeacherModal {
 
     if (this.isValid) {
       this.teacherAdded.emit(newTeacher);
-
       form.reset();
       this.onClose();
-    }
-    else{
+    } else {
       this.messages = validationResult.messages;
     }
   }

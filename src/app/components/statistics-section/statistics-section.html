@@ -38,7 +38,7 @@
                 @if (item === '...') {
                 <span class="dots">...</span>
                 } @else {
-                <a href="#" [class.active]="item === currentStatsPage" (click)="onPageClick($event, item)">{{ item
+                <a href="#" [class.active]="item === this.dataService.currentPage()" (click)="onPageClick($event, item)">{{ item
                     }}</a>
                 }
             </li>

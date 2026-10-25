@@ -25,6 +25,5 @@ export class TeacherModal {
       (modal as any).hidePopover();
     }
     this.selectedTeacher = null;
-
-  }
+  } 
 }

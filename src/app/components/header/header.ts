@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { findUsers } from '../../utils';
+import { find } from '../../utils/processing';
+import { DataService } from '../../services/dataService';
 
 @Component({
   selector: 'app-header',
@@ -9,9 +10,9 @@ import { findUsers } from '../../utils';
   styleUrl: './header.scss'
 })
 export class Header {
-  @Input() teacherData: any[] = [];
   @Output() selectTeacher = new EventEmitter<any>();
 
+  dataService = inject(DataService);
   searchQuery: string = '';
   searchResults: any[] = [];
   isSearchActive: boolean = false;
@@ -23,9 +24,10 @@ export class Header {
       this.isSearchActive = false;
     }
   }
+
   onSearchClick(): void {
     if (this.searchQuery && this.searchQuery.trim() !== '') {
-      this.searchResults = findUsers(this.teacherData, this.searchQuery);
+      this.searchResults = find(this.dataService.teachers(), this.searchQuery);
       this.isSearchActive = true;
     } else {
       this.searchResults = [];
@@ -45,7 +47,6 @@ export class Header {
   }
 
   onNameClick(event: Event): void {
-
     event.preventDefault();
 
     const target = event.target as HTMLElement;
@@ -54,7 +55,6 @@ export class Header {
 
     const id = idElement.dataset['id'];
     this.selectTeacher.emit(id);
-
   }
 
   onAddTeacherClick(): void {

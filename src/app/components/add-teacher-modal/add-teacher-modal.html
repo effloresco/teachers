@@ -14,9 +14,9 @@
         <div class="form-group">
             <label for="teacher-speciality">Speciality</label>
             <select id="teacher-speciality" name="course" required>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Physics">Physics</option>
+                @for (course of courses; track course) {
+                <option [value]="course">{{ course }}</option>
+                }
             </select>
         </div>
 
@@ -24,8 +24,8 @@
             <div class="form-group">
                 <label for="teacher-country">Country</label>
                 <select id="teacher-country" name="country" required>
-                    @for (country of countries; track country.value) {
-                    <option [value]="country.value">{{ country.label }}</option>
+                    @for (country of countries; track country) {
+                    <option [value]="country">{{ country }}</option>
                     }
                 </select>
             </div>
@@ -71,8 +71,8 @@
         @if(!isValid){
         <div class="input-errors">
             @for (err of messages; track $index) {
-                    <p>{{ err }}</p>
-                }
+            <p>{{ err }}</p>
+            }
         </div>
         }
         <button type="submit" class="btn-submit">Add</button>

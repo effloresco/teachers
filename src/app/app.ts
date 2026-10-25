@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { transformUsers, COUNTRIES } from './utils';
 import { Header } from './components/header/header';
 import { TeacherSection } from './components/teacher-section/teacher-section';
 import { StatisticsSection } from './components/statistics-section/statistics-section';
@@ -13,7 +12,6 @@ import { DataService } from './services/dataService';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     CommonModule,
     Header,
@@ -29,31 +27,16 @@ import { DataService } from './services/dataService';
   templateUrl: './app.html'
 })
 export class App implements OnInit {
-
   teacherData = signal([] as any[]);
-  receivedTeachers: any[] = [];
-  countries = COUNTRIES;
   selectedTeacher: any = null;
-
-  private dataService = inject(DataService);
+  dataService = inject(DataService);
 
   ngOnInit(): void {
-    this.dataService.getTeachers().subscribe({
-      next: (data) => {
-        this.receivedTeachers = data;
-        console.log('Завантажено:', data);
-        this.teacherData.set(transformUsers(this.receivedTeachers));
-        console.log('Перетворено:', this.teacherData);
-      },
-      error: (err) => {
-        console.error('Помилка завантаження даних:', err);
-      }
-    });
-
+    this.dataService.loadTeachers();
   }
 
   openTeacherModal(teacher: any): void {
-    const found = this.teacherData().find(item => item.id === teacher);
+    const found = this.dataService.teachers().find(item => item.id === teacher);
     this.selectedTeacher = found;
     const modal = document.getElementById('teacher-modal');
     if (modal && typeof (modal as any).showPopover === 'function') {
@@ -67,31 +50,12 @@ export class App implements OnInit {
 
   toggleFavorite(teacher: any): void {
     const newStatus = !teacher.favorite;
-
-    const isSameTeacher = (a: any, b: any) => {
-      if (a.id === b.id) return true;
-      return false;
-    };
-
-    this.teacherData.set(this.teacherData().map(t =>
-      isSameTeacher(t, teacher) ? { ...t, favorite: newStatus } : t
-    ));
-
-    if (this.selectedTeacher && isSameTeacher(this.selectedTeacher, teacher)) {
       this.selectedTeacher = { ...this.selectedTeacher, favorite: newStatus };
-    }
+    this.dataService.toggleFavorite(teacher);
   }
 
-
-
   loadMoreTeachers(): void {
-    this.dataService.getTeachers(10).subscribe({
-      next: (newBatch) => {
-        const transformed = transformUsers(newBatch);
-        this.teacherData.update(current => [...current, ...transformed]);
-      },
-      error: (err) => console.error('Помилка довантаження:', err)
-    });
+    this.dataService.loadTeachers(10)
   }
 
 }

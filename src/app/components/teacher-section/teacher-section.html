@@ -35,7 +35,7 @@
     </div>
 
     <div class="teachers-grid" (click)="onOpenTeacherModal($event)">
-        @for (item of filteredTeachers; track item.id) {
+        @for (item of this.dataService.filteredTeachers(); track item.id) {
         <app-teacher-card [teacher]="item" [attr.data-id]="item.id">
         </app-teacher-card>
         }
