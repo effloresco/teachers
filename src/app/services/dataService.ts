@@ -1,5 +1,6 @@
 import { Service, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { transformUsers } from '../utils/normalization';
 import { filterTeachers } from '../utils/processing';
@@ -41,6 +42,13 @@ export class DataService {
         },
         error: (err) => console.error('Помилка завантаження:', err)
       });
+  }
+
+  addTeacher(teacherData: any): Observable<any> {
+    const apiUrl = 'http://localhost:3000/teachers';
+    this.teachersSignal.update(currentTeachers => [teacherData, ...currentTeachers])
+
+    return this.http.post<any>(apiUrl, teacherData);
   }
 
   updateFilter(filterName: string, value: any): void {

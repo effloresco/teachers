@@ -1,8 +1,8 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { COUNTRIES, COURSES} from '../../utils/constants';
-import { createNewTeacher} from '../../utils/normalization';
-import { validateUser} from '../../utils/validation';
+import { COUNTRIES, COURSES } from '../../utils/constants';
+import { createNewTeacher } from '../../utils/normalization';
+import { validateUser } from '../../utils/validation';
 import { DataService } from '../../services/dataService';
 
 @Component({
@@ -12,8 +12,7 @@ import { DataService } from '../../services/dataService';
   styleUrl: './add-teacher-modal.scss'
 })
 export class AddTeacherModal {
-  //private dataService = inject(DataService);
-  @Output() teacherAdded = new EventEmitter<any>();
+  dataService = inject(DataService);
   countries = COUNTRIES;
   courses = COURSES;
   isValid: boolean = true;
@@ -43,9 +42,19 @@ export class AddTeacherModal {
     this.isValid = validationResult.isValid;
 
     if (this.isValid) {
-      this.teacherAdded.emit(newTeacher);
-      form.reset();
-      this.onClose();
+      this.dataService.addTeacher(newTeacher).subscribe({
+        next: (savedTeacher) => {
+          console.log('Sent to server:', savedTeacher);
+
+          form.reset();
+          this.messages = [];
+          this.onClose();
+        },
+
+        error: (err) => {
+          console.error('Error requesting server:', err);
+        }
+      });
     } else {
       this.messages = validationResult.messages;
     }

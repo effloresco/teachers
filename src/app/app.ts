@@ -27,7 +27,6 @@ import { DataService } from './services/dataService';
   templateUrl: './app.html'
 })
 export class App implements OnInit {
-  teacherData = signal([] as any[]);
   selectedTeacher: any = null;
   dataService = inject(DataService);
 
@@ -42,10 +41,6 @@ export class App implements OnInit {
     if (modal && typeof (modal as any).showPopover === 'function') {
       (modal as any).showPopover();
     }
-  }
-
-  addTeacher(newTeacher: any): void {
-    this.teacherData.update(teachers => [newTeacher, ...teachers]);
   }
 
   toggleFavorite(teacher: any): void {
