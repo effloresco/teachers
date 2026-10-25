@@ -1,0 +1,53 @@
+<section id="statistics">
+    <h2>Statistics</h2>
+    <table class="stats-table">
+        <thead (click)="onSortClick($event)">
+            <tr>
+                @for (column of columns; track column.field) {
+                <th [attr.data-field]="column.field">
+                    {{ column.label }}
+                    @if (currentSortField === column.field) {
+                    <span>{{ currentSortDirection === 'asc' ? '&#8595;' : '&#8593;' }}</span>
+                    }
+                </th>
+                }
+            </tr>
+        </thead>
+        <tbody (click)="onSelectClick($event)">
+            @for (item of currentItems; track item.id) {
+            <tr>
+                <td>
+                    <a href="#" [attr.data-id]="item.id">
+                        {{ item.full_name }}
+                    </a>
+                </td>
+                <td>{{ item.course }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.gender }}</td>
+                <td>{{ item.country }}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="statistics-footer">
+    <nav aria-label="pagination">
+        <ul class="pages">
+            @for (item of pages; track $index) {
+            <li>
+                @if (item === '...') {
+                <span class="dots">...</span>
+                } @else {
+                <a href="#" [class.active]="item === this.dataService.currentPage()" (click)="onPageClick($event, item)">{{ item
+                    }}</a>
+                }
+            </li>
+            }
+        </ul>
+    </nav>
+
+    <button type="button" class="btn-load-more" (click)="onLoadMoreClick($event)">
+        Load more
+    </button>
+    </div>
+</section>

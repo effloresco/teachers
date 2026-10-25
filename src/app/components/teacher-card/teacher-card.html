@@ -1,0 +1,21 @@
+<div class="teacher-card" [class.favorite]="teacher.favorite">
+    <button type="button" (click)="onCardClick()" class="avatar-btn">
+        <div class="photo">
+            <img [src]="teacher.picture_large" [alt]="teacher.alt">
+            @if (!isCompact && teacher.favorite) {
+            <span class="star-icon">&#9733;</span>
+            }
+        </div>
+    </button>
+    <h3>
+        @if (teacher.firstName && teacher.lastName) {
+        {{ teacher.firstName }}<br>{{ teacher.lastName }}
+        } @else {
+        {{ teacher.full_name }}
+        }
+    </h3>
+    @if (!isCompact) {
+        <p class="speciality">{{ teacher.course }}</p>
+    }
+    <p class="country">{{ teacher.country }}</p>
+</div>
