@@ -1,0 +1,18 @@
+<app-header [teacherData]="teacherData" (selectTeacher)="openTeacherModal($event)"></app-header>
+<main>
+    <hr class="divider">
+    <app-teacher-section [teacherData]="teacherData" (selectTeacher)="openTeacherModal($event)">
+    </app-teacher-section>
+    <hr class="divider">
+    <app-statistics-section [teacherData]="teacherData" (selectTeacher)="openTeacherModal($event)"
+        (teacherDataChange)="teacherData = $event"></app-statistics-section>
+    <hr class="divider">
+    <app-favorites-section [teacherData]="teacherData"
+        (selectTeacher)="openTeacherModal($event)"></app-favorites-section>
+    <hr class="divider">
+    <app-about-section></app-about-section>
+</main>
+<app-footer></app-footer>
+
+<app-add-teacher-modal [countries]="countries" (teacherAdded)="addTeacher($event)"></app-add-teacher-modal>
+<app-teacher-modal [selectedTeacher]="selectedTeacher" (toggleFavorite)="toggleFavorite($event)"></app-teacher-modal>

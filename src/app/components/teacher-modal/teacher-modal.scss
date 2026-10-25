@@ -1,0 +1,127 @@
+$main-color: #f05a5b;
+$text-dark: #333333;
+$text-light: #666666;
+$border-color: #e5e5e5;
+$font-main: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+
+.popover-body {
+    padding: 20px;
+}
+
+.teacher-profile {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+
+    .profile-photo {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid #f05a5b;
+        display: block;
+        color: #f05a5b;
+        text-align: center;
+        line-height: 180px;
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .profile-details {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+
+            h2 {
+                margin: 0;
+                font-size: 22px;
+                font-weight: normal;
+                color: #222222;
+            }
+
+            .star-btn {
+                background: none;
+                border: none;
+                font-size: 22px;
+                color: #f7d100;
+                cursor: pointer;
+                padding: 0;
+                line-height: 1;
+            }
+        }
+
+        .speciality {
+            font-size: 14px;
+            font-weight: bold;
+            color: #222222;
+            margin: 0 0 12px 0;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #666666;
+            margin: 0 0 6px 0;
+        }
+
+        .contact {
+            margin: 4px 0;
+
+            a {
+                font-size: 12px;
+                color: #3198a6;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .contact-phone {
+            font-size: 12px;
+            color: #444444;
+            margin: 4px 0 0 0;
+        }
+    }
+}
+
+.teacher-description {
+    p {
+        font-size: 12px;
+        color: #444444;
+        line-height: 1.4;
+        margin: 0 0 10px 0;
+    }
+
+    .toggle-map-link {
+        font-size: 12px;
+        color: #3198a6;
+        text-decoration: underline;
+    }
+}
+
+@media(max-width: 768px){
+    .teacher-profile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .profile-photo {
+            width: 130px;
+            height: 130px;
+            line-height: 110px;
+        }
+
+        .profile-details .name-row {
+            justify-content: center;
+            gap: 10px;
+        }
+    }
+}

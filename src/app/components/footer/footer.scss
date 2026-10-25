@@ -1,0 +1,75 @@
+$main-color: #f05a5b;
+$text-dark: #333333;
+$text-light: #666666;
+$border-color: #e5e5e5;
+$font-main: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+$container-width: 960px;
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
+    margin-top: 20px;
+    border-top: 1px solid $border-color;
+}
+
+footer {
+    width: 100%;
+    max-width: $container-width;
+}
+
+a {
+    text-decoration: none;
+    color: $main-color;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+
+    a {
+        font-size: 18px;
+        font-weight: 500;
+
+        &:hover,
+        &.active {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    }
+}
+
+.btn-add-teacher {
+    background-color: transparent;
+    border: 1px solid $main-color;
+    color: $main-color;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: bold;
+
+    &:hover {
+        background-color: $main-color;
+        color: #ffffff;
+    }
+}
+
+@media(max-width: 768px) {
+
+    footer {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .btn-add-teacher {
+        width: 100%;
+        text-align: center;
+    }
+}
