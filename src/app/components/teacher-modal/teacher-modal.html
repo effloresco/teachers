@@ -1,4 +1,4 @@
-<div id="teacher-modal" class="modal" popover>
+<div id="teacher-modal" class="modal" (beforetoggle)="beforeToggle($event)" popover>
     @if (selectedTeacher) {
     <div class="popover-header">
         <h2>Teacher Info</h2>
@@ -36,8 +36,12 @@
 
         <div class="teacher-description">
             <p>{{ selectedTeacher.note }}</p>
-            <a href="#" class="toggle-map-link" (click)="$event.preventDefault()">toggle map</a>
+            <a href="#" class="toggle-map-link" (click)="onToggleMap($event)">toggle map</a>
         </div>
+        @if (showMap){
+        <app-map [coords]="selectedTeacher.coordinates"></app-map>
+        }
     </div>
+
     }
 </div>
