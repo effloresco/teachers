@@ -1,0 +1,13 @@
+<div class="chart-controls">
+  @for (field of fields; track field.key) {
+  <button type="button" 
+    [class.active]="selectedField === field.key" 
+    (click)="changeField(field.key)">
+    {{ field.label }}
+  </button>
+  }
+</div>
+
+<div class="container">
+  <canvas id="canvas"></canvas>
+</div>

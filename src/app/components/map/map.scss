@@ -1,3 +1,5 @@
+$main-color: #f05a5b;
+
 .map-container {
   position: relative;
   margin-top: 5px;
@@ -5,7 +7,7 @@
 }
 
 .map-frame {
-  border: 2px solid black;
+  border: 2px solid $main-color;
   height: 100%;
 }
 

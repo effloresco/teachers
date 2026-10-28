@@ -3,16 +3,18 @@ import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/dataService';
 import { SortField } from '../../utils/types';
 import { sort } from '../../utils/processing';
+import { ChartView } from '../../components/chart-view/chart-view';
 
 @Component({
   selector: 'app-statistics-section',
-  imports: [CommonModule],
+  imports: [CommonModule, ChartView],
   templateUrl: './statistics-section.html',
   styleUrl: './statistics-section.scss'
 })
 export class StatisticsSection {
   @Output() selectTeacher = new EventEmitter<any>();
-  
+  chartView: boolean = false;
+
   dataService = inject(DataService);
   ITEMS_PER_PAGE = 10;
   currentPage = this.dataService.currentPage();
@@ -124,5 +126,9 @@ export class StatisticsSection {
 
     const id = idElement.dataset['id'];
     this.selectTeacher.emit(id);
+  }
+
+  switchClick(event: any): void {
+    this.chartView = event.target.checked;
   }
 }

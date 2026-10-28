@@ -1,5 +1,17 @@
 <section id="statistics">
     <h2>Statistics</h2>
+
+    <div class="switch-container">
+        <span class="view-options">Table</span>
+        <label class="switch">
+
+            <input type="checkbox"  [checked]="chartView" (click)="switchClick($event)">
+            <span class="slider round"></span>
+
+        </label>
+        <span class="view-options">Chart</span>
+    </div>
+    @if(!chartView){
     <table class="stats-table">
         <thead (click)="onSortClick($event)">
             <tr>
@@ -31,23 +43,27 @@
     </table>
 
     <div class="statistics-footer">
-    <nav aria-label="pagination">
-        <ul class="pages">
-            @for (item of pages; track $index) {
-            <li>
-                @if (item === '...') {
-                <span class="dots">...</span>
-                } @else {
-                <a href="#" [class.active]="item === this.dataService.currentPage()" (click)="onPageClick($event, item)">{{ item
-                    }}</a>
+        <nav aria-label="pagination">
+            <ul class="pages">
+                @for (item of pages; track $index) {
+                <li>
+                    @if (item === '...') {
+                    <span class="dots">...</span>
+                    } @else {
+                    <a href="#" [class.active]="item === this.dataService.currentPage()"
+                        (click)="onPageClick($event, item)">{{ item
+                        }}</a>
+                    }
+                </li>
                 }
-            </li>
-            }
-        </ul>
-    </nav>
+            </ul>
+        </nav>
 
-    <button type="button" class="btn-load-more" (click)="onLoadMoreClick($event)">
-        Load more
-    </button>
+        <button type="button" class="btn-load-more" (click)="onLoadMoreClick($event)">
+            Load more
+        </button>
     </div>
+    } @else {
+    <app-chart-view/>
+    }
 </section>
