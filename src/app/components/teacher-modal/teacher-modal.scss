@@ -67,7 +67,23 @@ $font-main: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
         .meta {
             font-size: 12px;
             color: #666666;
-            margin: 0 0 6px 0;
+            margin: 2px 0 6px 0;
+        }
+
+        .ageBox{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+                .counter{
+                    display: flexbox;
+                    color: $text-light;
+                    text-align: center;
+                    border: 1.5px solid rgba($main-color, 0.7); ;
+                    font-size: 12px;
+                    width: 150px;
+                }
+
         }
 
         .contact {

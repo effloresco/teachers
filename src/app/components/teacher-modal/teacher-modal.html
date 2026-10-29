@@ -26,7 +26,12 @@
 
                 <p class="speciality">{{ selectedTeacher.course}}</p>
                 <p class="meta">{{ selectedTeacher.country }}</p>
-                <p class="meta">{{ selectedTeacher.age }}, {{ selectedTeacher.gender }}</p>
+                <div class="ageBox">
+                    <p class="meta">{{ selectedTeacher.age }}</p>
+                    <span class ="meta"> {{formattedBirthday}} </span> 
+                        <span class="counter">Days to birthday: {{daysToBD}}</span>
+                </div>
+                <p class="meta">{{ selectedTeacher.gender }}
                 <p class="contact">
                     <a [href]="'mailto:' + selectedTeacher.email">{{ selectedTeacher.email }}</a>
                 </p>
