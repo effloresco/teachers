@@ -1,56 +1,58 @@
+import _ from 'lodash';
 import { COURSES } from './constants';
 
 export function getRandomCourse(): string {
-  const index = Math.floor(Math.random() * COURSES.length);
-  return COURSES[index];
+    return _.sample(COURSES) || '';
 }
 
 export function getAlt(teacher: any): string {
-  if (teacher.alt) {
-    return teacher.alt;
-  }
-
-  const firstLetter = teacher.name?.first?.[0];
-  const lastLetter = teacher.name?.last?.[0];
-
-  if (firstLetter && lastLetter) {
-    return `${firstLetter.toUpperCase()}. ${lastLetter.toUpperCase()}`;
-  }
-
-  if (teacher.full_name) {
-    const names = teacher.full_name.trim().split(" ");
-    if (names.length >= 2 && names[0]?.[0] && names[1]?.[0]) {
-      return `${names[0][0].toUpperCase()}. ${names[1][0].toUpperCase()}`;
+    if (teacher?.alt) {
+        return teacher.alt;
     }
-    if (names.length === 1 && names[0]?.[0]) {
-      return `${names[0][0].toUpperCase()}.`;
-    }
-  }
 
-  return '';
+    const firstChar = _.toUpper(teacher.name?.first?.[0]);
+    const lastChar = _.toUpper(teacher.name?.last?.[0]);
+
+    if (firstChar && lastChar) {
+        return `${firstChar}. ${lastChar}.`;
+    }
+
+    const fullName = _.trim(_.get(teacher, 'full_name'));
+    if (!_.isEmpty(fullName)) {
+        const names = _.words(fullName);
+        const firstInitial = _.toUpper(_.get(names, '[0][0]'));
+        const secondInitial = _.toUpper(_.get(names, '[1][0]'));
+
+        if (_.size(names) >= 2 && firstInitial && secondInitial) {
+            return `${firstInitial}. ${secondInitial}.`;
+        }
+        if (_.size(names) === 1 && firstInitial) {
+            return `${firstInitial}.`;
+        }
+    }
+
+    return '';
 }
 
 export function calculateAge(dob: string): number | '' {
-  if (!dob) return '';
-  const birthDate = new Date(dob);
-  if (isNaN(birthDate.getTime())) return '';
-  const diff = Date.now() - birthDate.getTime();
-  return Math.abs(new Date(diff).getUTCFullYear() - 1970);
+    if (!dob) return '';
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return '';
+    const diff = Date.now() - birthDate.getTime();
+    return Math.abs(new Date(diff).getUTCFullYear() - 1970);
 }
 
 export function splitFullName(fullName: string): { firstName: string; lastName: string } {
-  const parts = fullName.trim().split(/\s+/);
-  return {
-    firstName: parts[0] || '',
-    lastName: parts.slice(1).join(' ') || ''
-  };
+    const parts = _.words(_.trim(fullName));
+    return {
+        firstName: _.first(parts) || '',
+        lastName: _.join(_.tail(parts), ' ') || ''
+    };
 }
 
 export function transformUsers(randomUsers: any[]): any[] {
-  const uniqueMap = new Map();
 
-  for (const item of randomUsers) {
-    const formattedUser = {
+ const formattedUsers = randomUsers.map(item => ({
       gender: item.gender?.toLowerCase() || '',
       title: item.title || item.name?.title || '',
       full_name: item.full_name || (item.name ? `${item.name.first} ${item.name.last}` : ''),
@@ -72,16 +74,11 @@ export function transformUsers(randomUsers: any[]): any[] {
       bg_color: item.bg_color || '#ffffff',
       note: item.note || '',
       alt: getAlt(item)
-    };
+  
+  }));
 
-    const key = formattedUser.id;
-    if (key && !uniqueMap.has(key)) {
-      uniqueMap.set(key, formattedUser);
-    }
-  }
-
-  return Array.from(uniqueMap.values());
-}
+  return _.uniqBy(formattedUsers, 'id');
+} 
 
 export function createNewTeacher(formData: {
   full_name: string;

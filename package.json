@@ -21,6 +21,7 @@
     "@types/leaflet": "^1.9.22",
     "chart.js": "^4.6.1",
     "leaflet": "^1.9.4",
+    "lodash": "^4.18.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -28,6 +29,7 @@
     "@angular/build": "^22.2.1",
     "@angular/cli": "^22.2.1",
     "@angular/compiler-cli": "^22.2.0",
+    "@types/lodash": "^4.17.27",
     "jsdom": "^30.0.0",
     "json-server": "^1.0.0-beta.15",
     "prettier": "^3.8.1",

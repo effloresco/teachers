@@ -18,7 +18,7 @@ export const PHONE_PATTERNS: Record<string, RegExp> = {
   'Netherlands': /^\(\d{3}\)-\d{3}-\d{4}$/,
   'Canada': /^\d{3}-\d{3}-\d{4}$/,
   'Denmark': /^\d{8}$/,
-  'United States': /^\(\d{3}\)-\d{3}-\d{4}$/,
+  'USA': /^\(\d{3}\)-\d{3}-\d{4}$/,
   'Germany': /^\d{4}-\d{7}$/,
   'Finland': /^\d{2}-\d{3}-\d{3}$/,
   'Ireland': /^\d{8}$/,
