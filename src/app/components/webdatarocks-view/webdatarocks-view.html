@@ -1,0 +1,20 @@
+<div class="wdr-header-controls">
+  <div class="mode-buttons">
+    <button type="button" 
+      [class.active]="currentMode === 'flat'" 
+      (click)="showFlatTable()">
+      Flat Table (All Teachers)
+    </button>
+    <button type="button" 
+      [class.active]="currentMode === 'country'"
+      (click)="showCountryReport()">
+      Country Report (Pivot)
+    </button>
+  </div>
+  
+  <button type="button" class="btn-load-more" (click)="onLoadMore($event)">
+    Load more
+  </button>
+</div>
+
+<div id="wdr-container"></div>
