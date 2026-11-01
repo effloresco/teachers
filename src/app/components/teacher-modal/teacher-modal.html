@@ -1,0 +1,52 @@
+<div id="teacher-modal" class="modal" (beforetoggle)="beforeToggle($event)" popover>
+    @if (selectedTeacher) {
+    <div class="popover-header">
+        <h2>Teacher Info</h2>
+        <button type="button" popovertarget="teacher-modal" popovertargetaction="hide" class="close-btn"
+            (click)="closeTeacherModal()">&times;</button>
+    </div>
+
+    <div class="popover-body">
+        <div class="teacher-profile">
+            <img [src]="selectedTeacher.picture_large" [alt]="selectedTeacher.alt" class="profile-photo">
+
+            <div class="profile-details">
+                <div class="name-row">
+                    <h2>{{ selectedTeacher.full_name }}</h2>
+
+                    <button type="button" class="star-btn" [class.active]="selectedTeacher.favorite"
+                        (click)="onToggleFavorite(selectedTeacher)" title="Add to favorites">
+                        @if (selectedTeacher.favorite) {
+                        &#9733;
+                        } @else {
+                        &#9734;
+                        }
+                    </button>
+                </div>
+
+                <p class="speciality">{{ selectedTeacher.course}}</p>
+                <p class="meta">{{ selectedTeacher.country }}</p>
+                <div class="ageBox">
+                    <p class="meta">{{ selectedTeacher.age }}</p>
+                    <span class ="meta"> {{formattedBirthday}} </span> 
+                        <span class="counter">Days to birthday: {{daysToBD}}</span>
+                </div>
+                <p class="meta">{{ selectedTeacher.gender }}
+                <p class="contact">
+                    <a [href]="'mailto:' + selectedTeacher.email">{{ selectedTeacher.email }}</a>
+                </p>
+                <p class="contact-phone">{{ selectedTeacher.phone }}</p>
+            </div>
+        </div>
+
+        <div class="teacher-description">
+            <p>{{ selectedTeacher.note }}</p>
+            <a href="#" class="toggle-map-link" (click)="onToggleMap($event)">toggle map</a>
+        </div>
+        @if (showMap){
+        <app-map [coords]="selectedTeacher.coordinates"></app-map>
+        }
+    </div>
+
+    }
+</div>

@@ -1,0 +1,58 @@
+$main-color: #f05a5b;
+$text-light: #666666;
+
+#favorites {
+  text-align: center;
+  padding: 2rem 0;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sliders {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+
+    .arrow-left,
+    .arrow-right {
+      background: transparent;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: $text-light;
+      transition: color 0.2s, transform 0.2s;
+      padding: 0.5rem;
+
+      &:hover {
+        color: $main-color;
+        transform: scale(1.15);
+      }
+    }
+
+    .favorites-grid {
+      display: flex;
+      gap: 3.1rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding: 1rem 0.5rem;
+      width: 100%;
+    
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Edge */
+      }
+
+      app-teacher-card {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+      }
+    }
+  }
+}

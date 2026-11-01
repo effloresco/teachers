@@ -1,0 +1,33 @@
+$main-color: #f05a5b;
+
+.chart-controls {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.container {
+    border: 1px solid $main-color;
+    padding: 10px; border-radius: 6px;
+}
+
+canvas{
+    height: 450px;
+}
+
+button {
+    padding: 6px 12px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+    color: #000;
+    transition: 0.2s;
+
+    &.active {
+        background-color: #2196F3;
+        color: #fff;
+        border-color: #2196F3;
+    }
+}
