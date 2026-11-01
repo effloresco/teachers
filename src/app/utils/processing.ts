@@ -112,10 +112,10 @@ export function find(data: any[], query: string | number, field?: SearchField): 
 
 export function getMatchingPercentage(
     users: any[],
-    predicate: (user: any) => boolean
+    condition: (user: any) => boolean
 ): number {
     if (!users || users.length === 0) return 0;
-    const matchingCount = users.filter(predicate).length;
+    const matchingCount = users.filter(condition).length;
     const percentage = (matchingCount / users.length) * 100;
     return Number(percentage.toFixed(2));
 }

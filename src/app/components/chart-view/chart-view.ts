@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../../services/dataService'; // Перевірте шлях до вашого сервісу
+import { DataService } from '../../services/dataService';
 import { getMatchingPercentage } from '../../utils/processing';
 import { Chart } from 'chart.js/auto';
 

@@ -23,10 +23,10 @@ L.Marker.prototype.options.icon = iconDefault;
 })
 export class Map implements OnChanges, AfterViewInit {
   @Input() coords: any = null;
-  private map: any;
-  private marker: any = null;
+  map: any;
+  marker: any = null;
 
-  private initMap(): void {
+  initMap(): void {
     const lat = this.coords?.latitude || 0;
     const lng = this.coords?.longitude || 0;
     this.map = L.map('map', {
@@ -44,7 +44,7 @@ export class Map implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(): void {
-  const lat = this.coords?.latitude || 0;
+    const lat = this.coords?.latitude || 0;
     const lng = this.coords?.longitude || 0;
 
     if (this.map) {
@@ -57,9 +57,9 @@ export class Map implements OnChanges, AfterViewInit {
       }
     }
 
-}
+  }
 
-ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.initMap();
   }
 
